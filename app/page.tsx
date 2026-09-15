@@ -1,69 +1,39 @@
 import Image from "next/image";
+import Link from "next/link";
+import { formatMeetingDate } from "@/lib/format";
+import { getMostRecentMeeting } from "@/lib/meetings-db";
 
 export default function Home() {
+  const currentMeeting = getMostRecentMeeting();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="mx-auto w-full max-w-6xl px-5 py-10 lg:px-8 lg:py-16">
+      <section className="grid overflow-hidden bg-[var(--ink)] text-white lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="relative flex min-h-[430px] flex-col justify-between p-8 sm:p-12">
+          <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full border-[24px] border-[var(--sun)]/80" aria-hidden="true" />
+          <p className="relative text-xs font-semibold uppercase tracking-[0.3em] text-[var(--sun)]">{formatMeetingDate(currentMeeting.date)}</p>
+          <div className="relative max-w-xl">
+            <h1 className="font-serif text-5xl leading-[0.98] sm:text-7xl">Gather with purpose.</h1>
+            <p className="mt-6 max-w-md text-lg leading-8 text-white/70">A clear, calm place for the Cedar Ridge Ward to prepare this week&apos;s meeting and revisit the Sundays that shaped us.</p>
+            <Link href={`/meetings/${currentMeeting.id}`} className="mt-8 inline-flex items-center gap-3 bg-[var(--sun)] px-5 py-3 font-semibold text-[var(--ink)] transition-transform hover:translate-x-1">
+              View this Sunday <span aria-hidden="true">-&gt;</span>
+            </Link>
+          </div>
+          <p className="relative text-sm text-white/50">Meeting planner / 2026</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="relative min-h-[300px] overflow-hidden bg-[var(--sage)] p-8 sm:p-12">
+          <Image src="/window.svg" alt="A simple window illustration representing a Sunday gathering" width={240} height={240} className="absolute bottom-8 right-8 h-52 w-52 opacity-25 invert" priority />
+          <div className="relative flex h-full flex-col justify-end">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/65">On the agenda</p>
+            <p className="mt-3 max-w-xs font-serif text-3xl leading-tight">Faith in Jesus Christ, covenant belonging, and a musical offering.</p>
+          </div>
         </div>
-      </main>
+      </section>
+      <section className="grid gap-5 py-10 sm:grid-cols-3">
+        <div className="border-t-2 border-[var(--sun)] pt-4"><p className="font-serif text-3xl">{currentMeeting.speakers.length}</p><p className="mt-1 text-sm text-[var(--muted)]">voices and offerings</p></div>
+        <div className="border-t-2 border-[var(--sage)] pt-4"><p className="font-serif text-3xl">{currentMeeting.wardBusiness.length}</p><p className="mt-1 text-sm text-[var(--muted)]">ward business items</p></div>
+        <div className="border-t-2 border-[var(--ink)] pt-4"><Link href="/meetings" className="font-serif text-2xl underline decoration-[var(--sun)] decoration-2 underline-offset-4">Browse the archive</Link><p className="mt-1 text-sm text-[var(--muted)]">five recent programs</p></div>
+      </section>
     </div>
   );
 }
