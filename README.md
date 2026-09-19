@@ -22,7 +22,7 @@ vercel link
 vercel env pull .env.local
 ```
 
-`.env.local` must contain `DATABASE_URL`; it is excluded by `.gitignore` and must never be committed. The meetings archive supports URL state such as `/meetings?query=smith&page=1`, and the API accepts `query`, `page`, and the existing `date` parameter.
+`.env.local` must contain `DATABASE_URL` or Vercel's `POSTGRES_PRISMA_URL`; it is excluded by `.gitignore` and must never be committed. The meetings archive supports URL state such as `/meetings?query=smith&page=1`, and the API accepts `query`, `page`, and the existing `date` parameter.
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

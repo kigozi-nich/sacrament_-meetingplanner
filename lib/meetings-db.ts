@@ -8,7 +8,7 @@ let sql: SqlClient | undefined;
 
 function getSql(): SqlClient {
   if (!sql) {
-    const databaseUrl = process.env.DATABASE_URL;
+    const databaseUrl = process.env.DATABASE_URL ?? process.env.POSTGRES_PRISMA_URL;
     if (!databaseUrl) {
       throw new Error("DATABASE_URL is required to access meeting data.");
     }
