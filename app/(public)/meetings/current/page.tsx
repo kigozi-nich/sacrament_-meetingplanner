@@ -4,8 +4,8 @@ import { getMeetings } from "@/lib/meetings-db";
 
 export const dynamic = "force-dynamic";
 
-export default function CurrentMeetingPage() {
+export default async function CurrentMeetingPage() {
   const currentSunday = getCurrentSunday();
-  const meeting = getMeetings(currentSunday)[0];
-  redirect(`/meetings/${meeting?.id ?? 1}`);
+  const meeting = (await getMeetings("", 1, currentSunday))[0];
+  redirect(meeting ? `/meetings/${meeting.id}` : "/meetings");
 }

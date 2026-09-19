@@ -12,6 +12,17 @@ yarn dev
 pnpm dev
 # or
 bun dev
+
+## Week 03 setup
+
+The meeting list now reads from Neon Postgres. Create the `meetings` table and seed it with meeting records using the SQL in the assignment, then pull the Vercel environment variables locally:
+
+```bash
+vercel link
+vercel env pull .env.local
+```
+
+`.env.local` must contain `DATABASE_URL`; it is excluded by `.gitignore` and must never be committed. The meetings archive supports URL state such as `/meetings?query=smith&page=1`, and the API accepts `query`, `page`, and the existing `date` parameter.
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

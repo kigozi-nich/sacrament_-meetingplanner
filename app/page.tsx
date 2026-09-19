@@ -3,8 +3,14 @@ import Link from "next/link";
 import { formatMeetingDate } from "@/lib/format";
 import { getMostRecentMeeting } from "@/lib/meetings-db";
 
-export default function Home() {
-  const currentMeeting = getMostRecentMeeting();
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const currentMeeting = await getMostRecentMeeting();
+
+  if (!currentMeeting) {
+    return null;
+  }
 
   return (
     <div className="mx-auto w-full max-w-6xl px-5 py-10 lg:px-8 lg:py-16">

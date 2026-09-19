@@ -5,6 +5,7 @@ export const meetingTypeLabels: Record<MeetingType, string> = {
   regular: "Regular sacrament meeting",
   stake: "Stake meeting",
   general: "General meeting",
+  special: "Special meeting",
 };
 
 export function formatMeetingDate(date: string): string {

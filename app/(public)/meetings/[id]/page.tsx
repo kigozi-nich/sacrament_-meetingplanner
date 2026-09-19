@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import MeetingDetail from "@/components/MeetingDetail";
-import { getApiUrl } from "@/lib/api";
+import { getMeetingById } from "@/lib/meetings-db";
 import type { SacramentMeeting } from "@/lib/types";
 
 interface MeetingPageProps {
@@ -9,12 +9,15 @@ interface MeetingPageProps {
 
 export default async function MeetingPage({ params }: MeetingPageProps) {
   const { id } = await params;
-  const response = await fetch(await getApiUrl(`/api/meetings/${id}`), { cache: "no-store" });
-
-  if (!response.ok) {
+  const meetingId = Number(id);
+  if (!Number.isInteger(meetingId) || meetingId < 1) {
     notFound();
   }
 
-  const meeting: SacramentMeeting = await response.json();
+  const meeting: SacramentMeeting | null = await getMeetingById(meetingId);
+  if (!meeting) {
+    notFound();
+  }
+
   return <MeetingDetail meeting={meeting} />;
 }
