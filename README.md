@@ -12,6 +12,7 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
 
 ## Week 03 setup
 
@@ -23,7 +24,10 @@ vercel env pull .env.local
 ```
 
 `.env.local` must contain `DATABASE_URL` or Vercel's `POSTGRES_PRISMA_URL`; it is excluded by `.gitignore` and must never be committed. The meetings archive supports URL state such as `/meetings?query=smith&page=1`, and the API accepts `query`, `page`, and the existing `date` parameter.
-```
+
+## Reflection
+
+See [REFLECTION.md](REFLECTION.md) for the project reflection, challenges, and a summary of how AI was used during development.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
