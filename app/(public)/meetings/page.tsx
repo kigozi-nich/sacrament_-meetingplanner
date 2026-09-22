@@ -21,7 +21,7 @@ export default async function MeetingsPage(props: {
     <section>
       <div className="mb-7 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><p className="max-w-xl text-[var(--muted)]">Browse recent programs, review the order of worship, and keep a clear record of each Sunday.</p><p className="text-sm font-semibold text-[var(--sage)]">{meetings.length} programs</p></div>
       <MeetingSearch />
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{meetings.map((meeting) => <MeetingCard key={meeting.id} meeting={meeting} />)}</div>
+      {meetings.length > 0 ? <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{meetings.map((meeting) => <MeetingCard key={meeting.id} meeting={meeting} />)}</div> : <p className="border border-dashed border-[var(--line)] px-5 py-10 text-center text-[var(--muted)]">No meetings found. Try a different search.</p>}
       <Pagination currentPage={currentPage} totalPages={totalPages} />
     </section>
   );

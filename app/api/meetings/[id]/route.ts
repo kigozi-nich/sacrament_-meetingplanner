@@ -12,7 +12,13 @@ export async function GET(_request: Request, { params }: MeetingRouteContext) {
     return Response.json({ error: "Meeting id must be a positive integer." }, { status: 400 });
   }
 
-  const meeting = await getMeetingById(meetingId);
+  let meeting;
+  try {
+    meeting = await getMeetingById(meetingId);
+  } catch (error) {
+    console.error("Unable to load meeting", error);
+    return Response.json({ error: "Unable to load meeting." }, { status: 500 });
+  }
 
   if (!meeting) {
     return Response.json({ error: "Meeting not found." }, { status: 404 });
