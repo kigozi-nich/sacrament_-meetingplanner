@@ -23,9 +23,7 @@ export function MeetingSearch() {
 
   return (
     <div className="mb-7">
-      <label htmlFor="meeting-search" className="mb-2 block text-xs font-bold uppercase tracking-[0.16em] text-[var(--sage)]">
-        Search programs
-      </label>
+      <label htmlFor="meeting-search" className="sr-only">Search meetings</label>
       <input
         id="meeting-search"
         type="search"
@@ -33,7 +31,7 @@ export function MeetingSearch() {
         defaultValue={searchParams.get("query") ?? ""}
         onChange={(event) => handleSearch(event.target.value)}
         aria-label="Search meetings"
-        className="w-full border border-[var(--line)] bg-[var(--paper)] px-4 py-3 text-[var(--ink)] outline-none transition-colors placeholder:text-[var(--muted)] focus:border-[var(--sage)] sm:max-w-xl"
+        className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-500 focus:border-slate-500 sm:max-w-xl"
       />
     </div>
   );
