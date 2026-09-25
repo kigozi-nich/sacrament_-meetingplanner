@@ -61,17 +61,19 @@ export async function getMeetings(
   return rows;
 }
 
-export async function getMeetingsTotalPages(query = ""): Promise<number> {
+export async function getMeetingsTotalPages(query = "", date?: string | null): Promise<number> {
   const searchTerm = searchPattern(query);
   const rows = (await getSql()`
     SELECT COUNT(*) AS count
     FROM meetings
-    WHERE
+    WHERE (
       ${query.trim()} = ''
       OR presiding ILIKE ${searchTerm}
       OR conducting ILIKE ${searchTerm}
       OR meeting_type ILIKE ${searchTerm}
       OR speakers::text ILIKE ${searchTerm}
+    )
+    AND (${date ?? null}::date IS NULL OR date = ${date ?? null}::date)
   `) as unknown as Array<{ count: string }>;
 
   return Math.max(1, Math.ceil(Number(rows[0].count) / ITEMS_PER_PAGE));
