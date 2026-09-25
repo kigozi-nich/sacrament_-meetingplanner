@@ -109,20 +109,103 @@ export async function getMostRecentMeeting(): Promise<SacramentMeeting | null> {
 export async function addMeeting(
   data: Omit<SacramentMeeting, "id">,
 ): Promise<SacramentMeeting> {
-  void data;
-  throw new Error("addMeeting: database implementation coming in Week 04");
+  const rows = (await getSql()`
+    INSERT INTO meetings (
+      date,
+      meeting_type,
+      presiding,
+      conducting,
+      announcements,
+      opening_hymn,
+      opening_prayer,
+      ward_business,
+      stake_business,
+      sacrament_hymn,
+      speakers,
+      closing_hymn,
+      closing_prayer
+    )
+    VALUES (
+      ${data.date},
+      ${data.meetingType},
+      ${data.presiding},
+      ${data.conducting},
+      ${JSON.stringify(data.announcements ?? [])},
+      ${JSON.stringify(data.openingHymn)},
+      ${data.openingPrayer},
+      ${JSON.stringify(data.wardBusiness ?? [])},
+      ${data.stakeBusiness},
+      ${JSON.stringify(data.sacramentHymn)},
+      ${JSON.stringify(data.speakers ?? [])},
+      ${JSON.stringify(data.closingHymn)},
+      ${data.closingPrayer}
+    )
+    RETURNING
+      id,
+      to_char(date, 'YYYY-MM-DD') AS "date",
+      meeting_type AS "meetingType",
+      presiding,
+      conducting,
+      announcements,
+      opening_hymn AS "openingHymn",
+      opening_prayer AS "openingPrayer",
+      ward_business AS "wardBusiness",
+      stake_business AS "stakeBusiness",
+      sacrament_hymn AS "sacramentHymn",
+      speakers,
+      closing_hymn AS "closingHymn",
+      closing_prayer AS "closingPrayer"
+  `) as unknown as SacramentMeeting[];
+
+  const meeting = rows[0];
+  if (!meeting) {
+    throw new Error("Failed to create meeting.");
+  }
+
+  return meeting;
 }
 
 export async function updateMeeting(
   id: number,
   updates: Partial<SacramentMeeting>,
 ): Promise<SacramentMeeting | null> {
-  void id;
-  void updates;
-  throw new Error("updateMeeting: database implementation coming in Week 04");
+  if (Object.keys(updates).length === 0) {
+    return getMeetingById(id);
+  }
+
+  const updatePairs: Array<[string, unknown]> = [];
+
+  if (updates.date !== undefined) updatePairs.push(["date", updates.date]);
+  if (updates.meetingType !== undefined) updatePairs.push(["meeting_type", updates.meetingType]);
+  if (updates.presiding !== undefined) updatePairs.push(["presiding", updates.presiding]);
+  if (updates.conducting !== undefined) updatePairs.push(["conducting", updates.conducting]);
+  if (updates.announcements !== undefined) updatePairs.push(["announcements", JSON.stringify(updates.announcements)]);
+  if (updates.openingHymn !== undefined) updatePairs.push(["opening_hymn", JSON.stringify(updates.openingHymn)]);
+  if (updates.openingPrayer !== undefined) updatePairs.push(["opening_prayer", updates.openingPrayer]);
+  if (updates.wardBusiness !== undefined) updatePairs.push(["ward_business", JSON.stringify(updates.wardBusiness)]);
+  if (updates.stakeBusiness !== undefined) updatePairs.push(["stake_business", updates.stakeBusiness]);
+  if (updates.sacramentHymn !== undefined) updatePairs.push(["sacrament_hymn", JSON.stringify(updates.sacramentHymn)]);
+  if (updates.speakers !== undefined) updatePairs.push(["speakers", JSON.stringify(updates.speakers)]);
+  if (updates.closingHymn !== undefined) updatePairs.push(["closing_hymn", JSON.stringify(updates.closingHymn)]);
+  if (updates.closingPrayer !== undefined) updatePairs.push(["closing_prayer", updates.closingPrayer]);
+
+  for (const [column, value] of updatePairs) {
+    await getSql()`
+      UPDATE meetings
+      SET ${column} = ${value}
+      WHERE id = ${id}
+    `;
+  }
+
+  return getMeetingById(id);
 }
 
 export async function deleteMeeting(id: number): Promise<boolean> {
-  void id;
-  throw new Error("deleteMeeting: database implementation coming in Week 04");
+  const rows = (await getSql()`
+    DELETE FROM meetings
+    WHERE id = ${id}
+    RETURNING id
+  `) as Array<{ id: number }>;
+
+  return rows.length > 0;
 }

@@ -33,7 +33,10 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
     <article className="bg-[var(--paper)] px-5 py-8 sm:px-10 sm:py-12 print:p-0">
       <div className="no-print mb-8 flex items-center justify-between gap-4">
         <Link href="/meetings" className="text-sm font-semibold text-[var(--muted)] hover:text-[var(--ink)]">&lt;- All meetings</Link>
-        <PrintButton />
+        <div className="flex items-center gap-3">
+          <Link href={`/meetings/${meeting.id}/edit`} className="text-sm font-semibold text-[var(--sage)] underline decoration-[var(--sun)] decoration-2 underline-offset-4">Edit</Link>
+          <PrintButton />
+        </div>
       </div>
       <header className="border-b-2 border-[var(--ink)] pb-8">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--sage)]">{meetingTypeLabels[meeting.meetingType]}</p>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { deleteMeeting } from "@/lib/actions";
 import { formatMeetingDate, meetingTypeLabels } from "@/lib/format";
 import type { SacramentMeeting } from "@/lib/types";
 
@@ -23,7 +24,16 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
         <p className="mt-1"><span className="font-semibold text-[var(--ink)]">Conducting:</span> {meeting.conducting}</p>
         {featuredSpeaker && <p className="mt-4 text-[var(--ink)]">&ldquo;{featuredSpeaker.topic}&rdquo;</p>}
       </div>
-      <Link href={`/meetings/${meeting.id}`} className="mt-5 inline-flex text-sm font-bold text-[var(--ink)] underline decoration-[var(--sun)] decoration-2 underline-offset-4 group-hover:text-[var(--sage)]">Open program <span className="ml-2" aria-hidden="true">-&gt;</span></Link>
+      <div className="mt-5 flex flex-wrap items-center gap-3">
+        <Link href={`/meetings/${meeting.id}`} className="inline-flex text-sm font-bold text-[var(--ink)] underline decoration-[var(--sun)] decoration-2 underline-offset-4 group-hover:text-[var(--sage)]">Open program <span className="ml-2" aria-hidden="true">-&gt;</span></Link>
+        <Link href={`/meetings/${meeting.id}/edit`} className="text-sm font-semibold text-[var(--sage)] underline decoration-[var(--sun)] decoration-2 underline-offset-4">Edit</Link>
+        <form action={deleteMeeting} className="ml-auto">
+          <input type="hidden" name="id" value={meeting.id} />
+          <button type="submit" className="text-sm font-semibold text-[var(--muted)] underline decoration-[var(--sun)] decoration-2 underline-offset-4 hover:text-[var(--ink)]" aria-label={`Delete meeting on ${formatMeetingDate(meeting.date)}`}>
+            Delete
+          </button>
+        </form>
+      </div>
     </article>
   );
 }
